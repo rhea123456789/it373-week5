@@ -1,7 +1,7 @@
 from django.core.validators import MinLengthValidator
 from django.db import models
+from django.utils import timezone
 
-# Create your models here.
 class Post(models.Model):
     title = models.CharField(max_length=100, validators=[MinLengthValidator(3)])
     body = models.TextField(validators=[MinLengthValidator(10)])
@@ -16,14 +16,17 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    author = models.CharField(max_length=100)
-    text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    author_name = models.CharField(max_length=100)
+    body = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"Comment by {self.author} on {self.post_id}."
+        return f"Comment by {self.author_name} on {self.post}"
+
 
 class Student(models.Model):
     first_name = models.CharField(max_length=100)
@@ -32,6 +35,7 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+
 class Course(models.Model):
     code = models.CharField(max_length=20, unique=True)
     title = models.CharField(max_length=200)
@@ -39,6 +43,7 @@ class Course(models.Model):
 
     def __str__(self):
         return f"{self.code} - {self.title}"
+
 
 class Enrollment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -49,4 +54,4 @@ class Enrollment(models.Model):
         unique_together = ('student', 'course')
     
     def __str__(self):
-        return f"{self.student.first_name} {self.student.first_name} - {self.course.code}"
+        return f"{self.student.first_name} {self.student.last_name} - {self.course.code}"

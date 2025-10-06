@@ -1,5 +1,6 @@
 from django import forms
-from .models import Post
+from .models import Post, Comment
+
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -13,3 +14,20 @@ class PostForm(forms.ModelForm):
         if len(t) < 3:
             raise forms.ValidationError('Title too short.')
         return t
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['author_name', 'body']
+        widgets = {
+            'author_name': forms.TextInput(attrs={
+                'placeholder': 'Your name',
+                'class': 'form-control'
+            }),
+            'body': forms.Textarea(attrs={
+                'placeholder': 'Write your comment...',
+                'rows': 4,
+                'class': 'form-control'
+            }),
+        }

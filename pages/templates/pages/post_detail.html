@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<article>
+  <h1>{{ post.title }}</h1>
+  <div class="post-body">{{ post.body|linebreaks }}</div>
+</article>
+
+<hr>
+<section id="comments">
+  <h2>Comments</h2>
+  {% for comment in comments %}
+    <div class="comment">
+      <p><strong>{{ comment.author_name }}</strong>
+         <small>{{ comment.created_at }}</small></p>
+      <p>{{ comment.body|linebreaks }}</p>
+    </div>
+  {% empty %}
+    <p>No comments yet — be the first to comment!</p>
+  {% endfor %}
+</section>
+
+<hr>
+<section id="add-comment">
+  <h2>Leave a comment</h2>
+
+  {% if form.non_field_errors %}
+    <div class="form-errors">
+      {{ form.non_field_errors }}
+    </div>
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group">
+        {{ field.label_tag }}
+        {% if field.errors %}
+          <div class="field-wrapper error">
+            {{ field }}
+            <div class="invalid-feedback">
+              {% for err in field.errors %}
+                <div>{{ err }}</div>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <div class="field-wrapper">
+            {{ field }}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit">Post comment</button>
+  </form>
+</section>
+
+<style>
+  .form-control {
+    display: block;
+    width: 100%;
+    padding: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .is-invalid,
+  .field-wrapper.error input,
+  .field-wrapper.error textarea {
+    border: 2px solid #dc3545;
+  }
+
+  .invalid-feedback {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .form-errors {
+    background: #ffe6e6;
+    padding: 0.5rem;
+    border: 1px solid #f5c2c2;
+    margin-bottom: 0.8rem;
+  }
+
+  .comment {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.6rem;
+  }
+</style>
+
+{% endblock %}
