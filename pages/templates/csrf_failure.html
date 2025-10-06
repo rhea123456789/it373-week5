@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>CSRF verification failed</h1>
-  <p>Sorry — we could not verify your form submission. This often happens when your session expired, or the page was open too long.</p>
-  <p><a href="javascript:history.back()">Go back</a> and try again (reload the page first).</p>
-  <p>If this keeps happening, contact the site administrator.</p>
-  <pre style="color:#666">{{ reason }}</pre>
+  <h1>Forbidden (403)</h1>
+  <p>It looks like your request was rejected for security reasons (CSRF token missing or invalid).</p>
+  {% if reason %}
+    <p>Reason: {{ reason }}</p>
+  {% endif %}
+  <p>Please go back and try again.</p>
 {% endblock %}

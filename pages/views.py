@@ -59,7 +59,7 @@ def post_update(request, pk):
         messages.error(request, 'Please correct the errors below.')
     else:
         form = PostForm(instance=post)
-    return render(request, 'post_form.html', {'form': form})
+    return render(request, 'pages/post_form.html', {'form': form})
 
 
 def post_delete(request, pk):
@@ -68,7 +68,7 @@ def post_delete(request, pk):
         post.delete()
         messages.success(request, f"Post `{post.title}` was deleted")
         return redirect('post_list')
-    return render(request, 'post_confirm_delete.html', {'post': post})
+    return render(request, 'pages/post_confirm_delete.html', {'post': post})
 
 
 def post_detail(request, pk):
